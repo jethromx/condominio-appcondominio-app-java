@@ -83,11 +83,14 @@ public class UserController {
         @PostMapping( consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
         @Operation(summary = Constants.API_CREATE_USER, description = Constants.API_CREATE_USER_DESCRIPTION)       
         @ApiResponse(responseCode = "200", description = Constants.API_CREATE_USER,
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE),
-        headers={ 
-            @Header(name = "Content-Type: "+ MediaType.APPLICATION_JSON_VALUE),
-            @Header(name = "Accept: "+ MediaType.APPLICATION_JSON_VALUE)       
-        })    
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ServiceResponse.class)
+                            ),
+                    headers={ 
+                            @Header(name = "Content-Type: "+ MediaType.APPLICATION_JSON_VALUE),
+                            @Header(name = "Accept: "+ MediaType.APPLICATION_JSON_VALUE)       
+                        })    
         public ResponseEntity<?> createUser(@Valid  @RequestBody CreateUserDto user,BindingResult bindingResult) {
             LOGGER.info(LOGLINE, Constants.METHOD_CREATE, Constants.IN);
     
@@ -107,13 +110,23 @@ public class UserController {
          * @return ResponseEntity con el resultado de la operación.
          */
         @PutMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-        @Operation(summary = Constants.API_UPDATE_USER, description = Constants.API_UPDATE_USER_DESCRIPTION)
+        @Operation( summary = Constants.API_UPDATE_USER, description = Constants.API_UPDATE_USER_DESCRIPTION,
+                    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                description = Constants.API_UPDATE_USER_DESCRIPTION,                    
+                                required = true,
+                                content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = UpdateUserDto.class))                    
+                                ))
         @ApiResponse(responseCode = "200", description = Constants.API_UPDATE_USER,
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE),
-        headers={ 
-            @Header(name = "Content-Type: "+MediaType.APPLICATION_JSON_VALUE),
-            @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
-        })
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ServiceResponse.class)
+                            ),
+                        headers={ 
+                            @Header(name = "Content-Type: "+MediaType.APPLICATION_JSON_VALUE),
+                            @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
+                        })
         public ResponseEntity<?> updateUser(@PathVariable String id, @Valid  @RequestBody UpdateUserDto user,BindingResult bindingResult) {
             LOGGER.info(LOGLINE, Constants.METHOD_UPDATE, Constants.IN);
     
@@ -133,11 +146,14 @@ public class UserController {
         @DeleteMapping(value="/{id}" , consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
         @Operation(summary = Constants.API_DELETE_USER, description = Constants.API_DELETE_USER_DESCRIPTION)
         @ApiResponse(responseCode = "204", description = Constants.API_DELETE_USER,
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE),
-        headers={ 
-            @Header(name = "Content-Type: "+MediaType.APPLICATION_JSON_VALUE),
-            @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
-        })
+                    content = @Content(
+                                        mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                        schema = @Schema(implementation = ServiceResponse.class)
+                                        ),
+                    headers={ 
+                        @Header(name = "Content-Type: "+MediaType.APPLICATION_JSON_VALUE),
+                        @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
+                    })
         public ResponseEntity<?> deleteUser(@PathVariable String id) {
             LOGGER.info(LOGLINE, Constants.METHOD_DELETE, Constants.IN);
 
