@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "api.endpoint.logout",
+    "type": "java.lang.String",
+    "description": "A description for 'api.endpoint.logout'"
+  },
+  {
+    "name": "api.version",
+    "type": "java.lang.String",
+    "description": "A description for 'api.version'"
+  },
+  {
+    "name": "security.jwt.secret-key",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.secret-key'"
+  },
+  {
+    "name": "security.jwt.refresh-token.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.refresh-token.expiration'"
+  },
+  {
+    "name": "security.jwt.expiration-time",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.expiration-time'"
+  },
+  {
+    "name": "api.endpoint.auth.match",
+    "type": "java.lang.String",
+    "description": "A description for 'api.endpoint.auth.match'"
+  },
+  {
+    "name": "api.endpoint.auth",
+    "type": "java.lang.String",
+    "description": "A description for 'api.endpoint.auth'"
+  }
+]}
