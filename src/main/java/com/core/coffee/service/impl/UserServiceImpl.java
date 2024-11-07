@@ -1,8 +1,8 @@
 package com.core.coffee.service.impl;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.core.coffee.dto.CreateUserDto;
+import com.core.coffee.dto.PagedResponse;
 import com.core.coffee.dto.ServiceResponse;
 import com.core.coffee.dto.UpdateUserDto;
 import com.core.coffee.entity.User;
@@ -19,6 +20,7 @@ import com.core.coffee.exception.CustomException;
 import com.core.coffee.repository.UserRepository;
 import com.core.coffee.service.UserService;
 import com.core.coffee.util.Constants;
+import com.core.coffee.util.MapperUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -42,23 +44,22 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
-    private ModelMapper modelMapper;
+    private MapperUtil mapperUtil;
 
     
     public UserServiceImpl(
         UserRepository userRepository,
-        ModelMapper modelMapper
+        MapperUtil mapperUtil
         ) {
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
+        this.mapperUtil = mapperUtil;
     }
 
     @Override
-    public ServiceResponse<User> createUser(CreateUserDto createUserDto) {
+    public ServiceResponse<User> create(CreateUserDto createUserDto) {
         LOGGER.info(LOGLINE, CREATE, Constants.IN);
         
-        this.modelMapper.getConfiguration().setAmbiguityIgnored(true);
-        User user = this.modelMapper.map(createUserDto, User.class);
+        User user = this.mapperUtil.map(createUserDto, User.class);
 
         userRepository.findByEmail(user.getEmail()).ifPresent(u -> {
             LOGGER.warn(LOGLINE, CREATE, Constants.API_USER_ALREADY_EXISTS);
@@ -72,11 +73,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServiceResponse<User> updateUser(String userId,UpdateUserDto updateUserDto) {
+    public ServiceResponse<User> update(String userId,UpdateUserDto updateUserDto) {
         LOGGER.info(LOGLINE, UPDATE, Constants.IN);
-
-        this.modelMapper.getConfiguration().setAmbiguityIgnored(true);
-        User user = this.modelMapper.map(updateUserDto, User.class);
+        
+        User user = this.mapperUtil.map(updateUserDto, User.class);
 
         userRepository.findById(userId).orElseThrow(() -> {
             LOGGER.warn(LOGLINE, UPDATE, Constants.API_USER_NOT_FOUND);
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServiceResponse<User> deleteUser(String userId) {
+    public ServiceResponse<User> delete(String userId) {
         LOGGER.info(LOGLINE, DELETE, Constants.IN);
 
         User user = userRepository.findById(userId).orElseThrow(() -> {
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable(value = "usersCache", key = "#userId")
-    public ServiceResponse<User> getUser(String userId) {
+    public ServiceResponse<?> getItem(String userId) {
         LOGGER.info(LOGLINE, GET, Constants.IN);
 
         User user = userRepository.findById(userId).orElseThrow(() -> {
@@ -121,15 +121,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable(value = "usersCache")
-    public ServiceResponse<Page<User>> getUsers(int page, int size) {
+    public ServiceResponse<PagedResponse<?>> getAll(int page, int size) {
         LOGGER.info(LOGLINE, GETS, Constants.IN);
-        LOGGER.info("Getting all users with pagination");
+
+        
+        
+        
 
         Pageable pageable = PageRequest.of(page, size);
         Page<User> usersPage = userRepository.findAll(pageable);
+        PagedResponse<User> pagedResponse = new PagedResponse<>(usersPage);
 
         LOGGER.info(LOGLINE, GETS, Constants.OUT);
-        return new ServiceResponse<>(Status.OK, usersPage, GET_USERS, HttpStatus.OK);
+        return new ServiceResponse<>(Status.OK, pagedResponse, GET_USERS, HttpStatus.OK);
     }
 
 }

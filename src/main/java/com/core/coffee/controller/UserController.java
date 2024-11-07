@@ -2,7 +2,6 @@ package com.core.coffee.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.core.coffee.dto.CreateUserDto;
 import com.core.coffee.dto.ErrorDto;
+import com.core.coffee.dto.PagedResponse;
 import com.core.coffee.dto.ServiceResponse;
 import com.core.coffee.dto.UpdateUserDto;
-import com.core.coffee.entity.User;
 import com.core.coffee.service.UserService;
 import com.core.coffee.util.Constants;
 import com.core.coffee.util.HandleResponseUtil;
@@ -96,7 +95,7 @@ public class UserController {
     
             Validate.ValidateInput(bindingResult, Constants.METHOD_CREATE);           
     
-            ServiceResponse<User> response= userService.createUser(user);
+            ServiceResponse<?> response= userService.create(user);
             return HandleResponseUtil.handle(response, Constants.METHOD_CREATE);
         }
 
@@ -132,7 +131,7 @@ public class UserController {
     
             Validate.ValidateInput(bindingResult, Constants.METHOD_UPDATE);
     
-            ServiceResponse<User> response= userService.updateUser( id,user);
+            ServiceResponse<?> response= userService.update( id,user);
             return HandleResponseUtil.handle(response, Constants.METHOD_UPDATE);
         }
 
@@ -159,7 +158,7 @@ public class UserController {
 
             Validate.ValidateInputId(id, Constants.METHOD_DELETE);
     
-            ServiceResponse<User> response= userService.deleteUser(id);
+            ServiceResponse<?> response= userService.delete(id);
             return HandleResponseUtil.handle(response, Constants.METHOD_DELETE);
         }
 
@@ -183,7 +182,7 @@ public class UserController {
 
             Validate.ValidateInputId(id, Constants.METHOD_GET);
     
-            ServiceResponse<User> response= userService.getUser(id);
+            ServiceResponse<?> response= userService.getItem(id);
             return HandleResponseUtil.handle(response, Constants.METHOD_GET);
         }
 
@@ -207,7 +206,7 @@ public class UserController {
         {
             LOGGER.info(LOGLINE, Constants.METHOD_GET, Constants.IN);
     
-            ServiceResponse<Page<User>> response = userService.getUsers(page, size);
+            ServiceResponse<PagedResponse<?>> response = userService.getAll(page, size);
             return HandleResponseUtil.handle(response, Constants.METHOD_GET);
         }
 

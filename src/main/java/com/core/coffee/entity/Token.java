@@ -15,14 +15,16 @@ import com.core.coffee.enums.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Document(collection = "tokens")
 @Data
+@EqualsAndHashCode(callSuper=true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Token {
+public class Token extends GenericEntity  {
 
     @Id
     private String id;  
@@ -35,17 +37,7 @@ public class Token {
     private String refreshToken;
     private TokenType tokenType;
 
-    @CreatedDate        
-    private LocalDateTime createdAt;
-
-    @CreatedBy
-    private String createdBy;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    @LastModifiedBy
-    private String updatedBy;
+    
     
     
 

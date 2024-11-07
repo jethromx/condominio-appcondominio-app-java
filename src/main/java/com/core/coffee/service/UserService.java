@@ -9,20 +9,8 @@ import com.core.coffee.entity.User;
 
 
 
-import org.springframework.data.domain.Page;
+public interface UserService extends GenericService<CreateUserDto, String> {
 
-
-public interface UserService {
-
-    public ServiceResponse<User>  createUser(CreateUserDto createUserDto);
-    
-        public ServiceResponse<User>  updateUser(String userId,UpdateUserDto updateUserDto);
-    
-        public ServiceResponse<User>  deleteUser(String userId);
-    
-        public ServiceResponse<User>  getUser(String userId);
-    
-        public ServiceResponse<Page<User>> getUsers(int page, int size);
-
+    public ServiceResponse<User>  update(String userId,UpdateUserDto updateUserDto);
 
 }
