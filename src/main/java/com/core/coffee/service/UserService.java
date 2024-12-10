@@ -9,8 +9,9 @@ import com.core.coffee.entity.User;
 
 
 
-public interface UserService extends GenericService<CreateUserDto, String> {
+public abstract class  UserService extends GenericService<CreateUserDto, String> {
 
-    public ServiceResponse<User>  update(String userId,UpdateUserDto updateUserDto);
+    public abstract ServiceResponse<User>  update(String userId,UpdateUserDto updateUserDto);
+    public abstract User validateExistUser(String id);
 
 }

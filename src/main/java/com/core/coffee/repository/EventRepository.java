@@ -3,6 +3,8 @@ package com.core.coffee.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 
@@ -13,9 +15,12 @@ public interface EventRepository extends MongoRepository<Event, String> {
     Optional<Event> findByIdAndActiveIsTrue(String id);
     Optional<Event> findByCondominiumAndNameAndActiveIsTrue(String condominiumId,String name);
 
-    List<Event> findAllByCondominiumAndActiveIsTrue(String condominiumId);
+    Page<Event> findAllByCondominium_IdAndActiveIsTrue(Pageable pageable,String condominiumId);
     List<Event> findAllByActiveIsTrue(String condominiumId);
-    List<Event> findAllByCondominiumAndApartmentAndActiveIsTrue(String condominiumId,String apartmentId);
+    Optional<Event> findAllByCondominium_IdAndApartment_IdAndNameAndActiveIsTrue(String condominiumId,String apartmentId,String name);
+    
+
+    
 
 
     

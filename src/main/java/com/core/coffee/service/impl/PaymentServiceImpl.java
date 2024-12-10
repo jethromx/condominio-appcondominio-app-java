@@ -21,7 +21,7 @@ import com.core.coffee.util.Constants;
 import com.core.coffee.util.MapperUtil;
 
 @Service
-public class PaymentServiceImpl implements PaymentService {
+public class PaymentServiceImpl extends PaymentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
     private static final String LOGLINE = PaymentServiceImpl.class.getName() + " - {} - {}";
 

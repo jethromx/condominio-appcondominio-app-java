@@ -3,7 +3,6 @@ package com.core.coffee.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,5 +47,8 @@ public class CreateCondominiumDto {
     private String contactEmail;
     
     private String notes;
+
+    @NotBlank(message = "Campo administrator obligatorio")
+    private String administrator;
     
 }

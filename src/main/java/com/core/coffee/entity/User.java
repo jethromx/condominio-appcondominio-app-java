@@ -1,16 +1,11 @@
 package com.core.coffee.entity;
 
-
-import java.time.LocalDateTime;
-
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -33,12 +28,14 @@ public class User extends GenericEntity {
         private String lastname;
         @Indexed
         private String email;
+
+        @JsonIgnore
         private String password;
         private List<String> roles; //rol: Rol del usuario (propietario, residente, admin, superadmin)
 
-        @DBRef(lazy = true)     
+        @DocumentReference( lazy = true)    
         private Condominium condominium;
-        @DBRef(lazy = true)     
+        @DocumentReference( lazy = true)   
         private Apartment apartment;
         
         private String phone;

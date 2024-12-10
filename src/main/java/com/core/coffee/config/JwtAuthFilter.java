@@ -73,6 +73,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             final String jwtToken = authHeader.substring(7);
+            if(jwtToken == null ){
+                LOGGER.debug(LOGLINE, "Token null", Constants.IN);                
+                filterChain.doFilter(request, response);
+                return;
+            }else if (jwtToken.isEmpty() || jwtToken.isBlank() || jwtToken.length() <20){
+                LOGGER.debug(LOGLINE, "Token empty", Constants.IN);                
+                filterChain.doFilter(request, response);
+                return;
+                
+            }
 
             final String userEmail = jwtUtil.extractEmailUser(jwtToken);
             

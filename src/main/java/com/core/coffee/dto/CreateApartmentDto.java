@@ -28,7 +28,7 @@ public class CreateApartmentDto {
     
     private int number;
 
-    private String phoneContac;
+    private String phoneContact;
     private String emailContact;
     
 }

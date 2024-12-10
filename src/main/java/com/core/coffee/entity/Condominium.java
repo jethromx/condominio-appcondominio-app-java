@@ -1,8 +1,8 @@
 package com.core.coffee.entity;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class Condominium extends GenericEntity {
     @Id
     private String id;  
     
-    @DBRef
+   @DocumentReference( lazy = true)
     private User administrator;
     
     private String name;

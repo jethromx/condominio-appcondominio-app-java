@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,10 +25,10 @@ public class Event  extends GenericEntity{
     private String id;
 
    
-    @DBRef(lazy = true)
+    @DocumentReference( lazy = true)
     private Condominium condominium;
 
-    @DBRef(lazy = true)
+    @DocumentReference( lazy = true)
     private Apartment apartment;
 
     private String name;

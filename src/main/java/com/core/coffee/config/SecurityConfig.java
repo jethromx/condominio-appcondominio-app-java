@@ -15,7 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.core.coffee.entity.Token;
 import com.core.coffee.exception.CustomException;
@@ -50,10 +51,20 @@ public class SecurityConfig  {
     private static final String LOGOUT = "logout";
 
     
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {     
         LOGGER.debug(LOGLINE, SECURITY_FILTER_CHAIN, Constants.IN);
         http
+            .cors(cors -> cors
+                .configurationSource(request -> {
+                    var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfiguration.setAllowedOrigins(java.util.List.of("*"));
+                    corsConfiguration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfiguration.setAllowedHeaders(java.util.List.of("*"));
+                    return corsConfiguration;
+                })
+            )
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(req ->
                 req

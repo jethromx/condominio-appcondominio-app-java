@@ -144,7 +144,7 @@ public class EventController {
         @Header(name = "Content-Type: "+MediaType.APPLICATION_JSON_VALUE),
         @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
     })
-    public ResponseEntity<?> getUser(@PathVariable String id) {
+    public ResponseEntity<?> getItem(@PathVariable String id) {
         LOGGER.info(LOGLINE, Constants.METHOD_GET, Constants.IN);
 
         Validate.ValidateInputId(id, Constants.METHOD_GET);
@@ -152,7 +152,10 @@ public class EventController {
         ServiceResponse<?> response= service.getItem(id);
         return HandleResponseUtil.handle(response, Constants.METHOD_GET);
     }
+    
 
+
+    
     @GetMapping(  produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = Constants.API_GET_EVENTS, description = Constants.API_GET_EVENTS_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = Constants.API_GET_EVENTS,
@@ -162,12 +165,14 @@ public class EventController {
         @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
     })
     public ResponseEntity<?> getAll(
+        @PathVariable("idCondominium") String id,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size)
+        
     {
         LOGGER.info(LOGLINE, Constants.METHOD_GET, Constants.IN);
 
-        ServiceResponse<PagedResponse<?>> response = service.getAll(page, size);
+        ServiceResponse<PagedResponse<?>> response = service.getAll(page, size, id);
         return HandleResponseUtil.handle(response, Constants.METHOD_GET);
     }
 

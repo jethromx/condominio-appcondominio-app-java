@@ -22,14 +22,22 @@ public class HandleResponseUtil {
      * @param method Método que se está ejecutando.
      * @return ResponseEntity con el resultado de la operación.
      */
-    public static ResponseEntity<?> handle(ServiceResponse<?> response,String method) {
+    @SuppressWarnings("null")
+	public static ResponseEntity<?> handle(ServiceResponse<?> response,String method) {
         if (response.getStatus().equals(Status.OK) && response.getResponseObject() != null) {         
             LOGGER.info(LOGLINE, method, Constants.OUT);
             return new ResponseEntity<>(response.getResponseObject(), response.getHttpCode());
-            } else if (response.getStatus().equals(Status.KO) && response.getResponseObject() != null) {
-                LOGGER.error(LOGLINE, method, Constants.ERROR);
-                return new ResponseEntity<>(response.getResponseObject(), response.getHttpCode());
-            } else {
+        } else if (response.getStatus().equals(Status.KO) && response.getResponseObject() != null) {
+            LOGGER.error(LOGLINE, method, Constants.ERROR);
+            return new ResponseEntity<>(response.getResponseObject(), response.getHttpCode());
+        }else if (response.getStatus().equals(Status.OK) && response.getResponseObject() == null) {
+            LOGGER.error(LOGLINE, method, Constants.ERROR);
+            return new ResponseEntity<>(null, response.getHttpCode());
+        }else if (response.getStatus().equals(Status.KO) && response.getResponseObject() == null) {
+            LOGGER.error(LOGLINE, method, Constants.ERROR);
+            return new ResponseEntity<>(null, response.getHttpCode());
+        }
+        else {
                 LOGGER.error(LOGLINE, method, Constants.ERROR);
                 throw  new CustomException(Constants.GENERIC_ERROR, Constants.ERROR_CODE.GENERIC_ERROR.getValue());               
         }

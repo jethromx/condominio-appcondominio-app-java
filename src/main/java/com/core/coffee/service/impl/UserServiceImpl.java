@@ -3,7 +3,6 @@ package com.core.coffee.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -23,24 +22,13 @@ import com.core.coffee.util.Constants;
 import com.core.coffee.util.MapperUtil;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final String LOGLINE = UserServiceImpl.class.getName() + " - {} - {}";
 
-    private static final String CREATE = "createUser";
-    private static final String UPDATE = "updateUser";
-    private static final String DELETE = "deleteUser";
-    private static final String GET = "getUser";
-    private static final String GETS = "getUsers";
-
-    private static final String CREATE_USER = "User Created Successful";
-    private static final String UPDATE_USER = "User Updated Successful";
-    private static final String DELETE_USER = "User Deleted Successful";
-    private static final String GET_USER = "User Found Successful";
-    private static final String GET_USERS = "Users Found Successful";
-
-
+ 
+    private static final String ENTITY = "User";
 
 
     private final UserRepository userRepository;
@@ -57,83 +45,85 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServiceResponse<User> create(CreateUserDto createUserDto) {
-        LOGGER.info(LOGLINE, CREATE, Constants.IN);
+        LOGGER.info(LOGLINE, Constants.CREATE+ENTITY, Constants.IN);
         
         User user = this.mapperUtil.map(createUserDto, User.class);
 
         userRepository.findByEmail(user.getEmail()).ifPresent(u -> {
-            LOGGER.warn(LOGLINE, CREATE, Constants.API_USER_ALREADY_EXISTS);
+            LOGGER.warn(LOGLINE, Constants.CREATE+ENTITY, Constants.API_USER_ALREADY_EXISTS);
             throw  new CustomException(Constants.API_USER_ALREADY_EXISTS, Constants.ERROR_CODE.VALIDATIONS_ERROR.getValue());
         });
 
         user = this.userRepository.save(user);
 
-        LOGGER.info(LOGLINE, CREATE, Constants.OUT);
-        return new ServiceResponse<User>(Status.OK, user, CREATE_USER, HttpStatus.OK);
+        LOGGER.info(LOGLINE, Constants.CREATE+ENTITY, Constants.OUT);
+        return new ServiceResponse<User>(Status.OK, user, Constants.CREATE_USER, HttpStatus.OK);
     }
 
     @Override
     public ServiceResponse<User> update(String userId,UpdateUserDto updateUserDto) {
-        LOGGER.info(LOGLINE, UPDATE, Constants.IN);
+        LOGGER.info(LOGLINE, Constants.UPDATE+ENTITY, Constants.IN);
         
         User user = this.mapperUtil.map(updateUserDto, User.class);
 
         userRepository.findById(userId).orElseThrow(() -> {
-            LOGGER.warn(LOGLINE, UPDATE, Constants.API_USER_NOT_FOUND);
+            LOGGER.warn(LOGLINE, Constants.UPDATE+ENTITY, Constants.API_USER_NOT_FOUND);
             throw  new CustomException(Constants.API_USER_NOT_FOUND, Constants.ERROR_CODE.VALIDATIONS_ERROR.getValue());
         });
 
         user = this.userRepository.save(user);
-        LOGGER.info(LOGLINE, UPDATE, Constants.OUT);
+        LOGGER.info(LOGLINE, Constants.UPDATE+ENTITY, Constants.OUT);
 
-        return new ServiceResponse<User>(Status.OK, user, UPDATE_USER, HttpStatus.OK);
+        return new ServiceResponse<User>(Status.OK, user, Constants.UPDATE_USER, HttpStatus.OK);
     }
 
     @Override
     public ServiceResponse<User> delete(String userId) {
-        LOGGER.info(LOGLINE, DELETE, Constants.IN);
+        LOGGER.info(LOGLINE, Constants.DELETE+ENTITY, Constants.IN);
 
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            LOGGER.warn(LOGLINE, DELETE, Constants.API_USER_NOT_FOUND);
+            LOGGER.warn(LOGLINE, Constants.DELETE+ENTITY, Constants.API_USER_NOT_FOUND);
             throw  new CustomException(Constants.API_USER_NOT_FOUND, Constants.ERROR_CODE.VALIDATIONS_ERROR.getValue());
         });        
 
         userRepository.deleteById(userId);        
-        LOGGER.info(LOGLINE, DELETE, Constants.OUT);
+        LOGGER.info(LOGLINE, Constants.DELETE+ENTITY, Constants.OUT);
 
-        return new ServiceResponse<User>(Status.OK, user, DELETE_USER, HttpStatus.CREATED);
+        return new ServiceResponse<User>(Status.OK, user, Constants.DELETE_USER, HttpStatus.CREATED);
         
     }
 
     @Override
-    @Cacheable(value = "usersCache", key = "#userId")
     public ServiceResponse<?> getItem(String userId) {
-        LOGGER.info(LOGLINE, GET, Constants.IN);
+        LOGGER.info(LOGLINE, Constants.GET+ENTITY, Constants.IN);
 
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            LOGGER.warn(LOGLINE, GET, Constants.API_USER_NOT_FOUND);
+            LOGGER.warn(LOGLINE, Constants.GET+ENTITY, Constants.API_USER_NOT_FOUND);
             throw  new CustomException(Constants.API_USER_NOT_FOUND, Constants.ERROR_CODE.VALIDATIONS_ERROR.getValue());
         });
 
-        LOGGER.info(LOGLINE, GET, Constants.OUT);
-        return new ServiceResponse<User>(Status.OK, user, GET_USER, HttpStatus.OK);
+        LOGGER.info(LOGLINE, Constants.GET+ENTITY, Constants.OUT);
+        return new ServiceResponse<User>(Status.OK, user, Constants.GET_USER, HttpStatus.OK);
     }
 
     @Override
-    @Cacheable(value = "usersCache")
     public ServiceResponse<PagedResponse<?>> getAll(int page, int size) {
-        LOGGER.info(LOGLINE, GETS, Constants.IN);
-
-        
-        
-        
+        LOGGER.info(LOGLINE, Constants.GETS+ENTITY, Constants.IN);
 
         Pageable pageable = PageRequest.of(page, size);
         Page<User> usersPage = userRepository.findAll(pageable);
         PagedResponse<User> pagedResponse = new PagedResponse<>(usersPage);
 
-        LOGGER.info(LOGLINE, GETS, Constants.OUT);
-        return new ServiceResponse<>(Status.OK, pagedResponse, GET_USERS, HttpStatus.OK);
+        LOGGER.info(LOGLINE, Constants.GETS+ENTITY, Constants.OUT);
+        return new ServiceResponse<>(Status.OK, pagedResponse, Constants.GET_USERS, HttpStatus.OK);
+    }
+
+    @Override
+    public User validateExistUser(String id){
+        return  userRepository.findByIdAndActiveIsTrue(id).orElseThrow( ()->{
+            LOGGER.warn(LOGLINE, ENTITY, Constants.API_USER_NOT_FOUND);
+            throw new CustomException(Constants.API_USER_NOT_FOUND, Constants.ERROR_CODE.VALIDATIONS_ERROR.getValue());
+        });
     }
 
 }

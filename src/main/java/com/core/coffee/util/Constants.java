@@ -77,6 +77,38 @@ public class Constants {
     public static final String API_GET_CONDOMINIUM_DESCRIPTION = "Retrieves a condominium by its ID";
     public static final String API_GET_CONDOMINIUMS="Get Condominiums";
     public static final String API_GET_CONDOMINIUMS_DESCRIPTION = "Retrieves all condominiums";
+    
+    
+    public static final String CREATE = "create";
+    public static final String UPDATE = "update";
+    public static final String DELETE = "delete";
+    public static final String GET = "get";
+    public static final String GETS = "gets";
+
+    public static final String CREATE_CONDOMINIUM = "Condominium Created Successful";
+    public static final String UPDATE_CONDOMINIUM = "Condominium Updated Successful";
+    public static final String DELETE_CONDOMINIUM = "Condominium Deleted Successful";
+    public static final String GET_CONDOMINIUM= "Condominium Found Successful";
+    public static final String GET_CONDOMINIUMS = "Condominium Found Successful";
+    
+    public static final String CREATE_APARTMENT = "Apartment Created Successful";
+    public static final String UPDATE_APARTMENT = "Apartment Updated Successful";
+    public static final String DELETE_APARTMENT = "Apartment Deleted Successful";
+    public static final String GET_APARTMENT= "Apartment Found Successful";
+    public static final String GETS_APARTMENT= "Apartments Found Successful";
+
+    public static final String CREATE_EVENT = "Event Created Successful";
+    public static final String UPDATE_EVENT = "Event Updated Successful";
+    public static final String DELETE_EVENT = "Event Deleted Successful";
+    public static final String GET_EVENT = "Event Found Successful";
+    public static final String GET_EVENTS = "Event Found Successful";
+
+    public static final String CREATE_USER = "User Created Successful";
+    public static final String UPDATE_USER = "User Updated Successful";
+    public static final String DELETE_USER = "User Deleted Successful";
+    public static final String GET_USER = "User Found Successful";
+    public static final String GET_USERS = "Users Found Successful";
+    
 
     public static final String API_GET_APARTMENT = "Get Apartment";
     public static final String API_GET_APARTMENT_DESCRIPTION = "Retrieves an apartment by its ID";

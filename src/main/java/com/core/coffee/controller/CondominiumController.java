@@ -23,6 +23,7 @@ import com.core.coffee.dto.CreateCondominiumDto;
 import com.core.coffee.dto.ErrorDto;
 import com.core.coffee.dto.PagedResponse;
 import com.core.coffee.dto.ServiceResponse;
+import com.core.coffee.dto.UpdateApartmentDto;
 import com.core.coffee.dto.UpdateCondominiumDto;
 import com.core.coffee.service.ApartmentService;
 import com.core.coffee.service.CondominiumService;
@@ -91,7 +92,7 @@ class CondominiumController {
 
     
     /*
-     * Condominium
+     * 
      * 
      * 
      */
@@ -105,9 +106,15 @@ class CondominiumController {
     })
     public ResponseEntity<?>  getAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size)
+            @RequestParam(defaultValue = "10") int size) 
         {
             LOGGER.info(LOGLINE, Constants.METHOD_LIST ,Constants.IN);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return ResponseEntity.status(500).build();
+            }
 
             ServiceResponse<PagedResponse<?>> response = condominiumService.getAll(page, size);
             return HandleResponseUtil.handle(response,Constants.METHOD_LIST);
@@ -255,7 +262,7 @@ class CondominiumController {
 
         Validate.ValidateInputId(idCondominium, GET_APARTMENTS);
 
-        ServiceResponse<PagedResponse<?>> response = apartmentService.getAll(page, size);
+        ServiceResponse<PagedResponse<?>> response = apartmentService.getAll(page, size,idCondominium);
         return HandleResponseUtil.handle(response, GET_APARTMENTS);
     }
 
@@ -278,7 +285,24 @@ class CondominiumController {
     }
 
     
-
+    
+    @PutMapping( value= "/{idCondominium}/apartment/{id}" , consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = Constants.API_UPDATE_CONDOMINIUM, description = Constants.API_UPDATE_CONDOMINIUM_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = Constants.API_UPDATE_CONDOMINIUM,
+    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE),
+    headers={ 
+        @Header(name = "Content-Type: "+MediaType.APPLICATION_JSON_VALUE),
+        @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
+    })
+    public ResponseEntity<?> updateApartment(@PathVariable("idCondominium") String id, @Valid @RequestBody UpdateApartmentDto dto,BindingResult bindingResult) {
+        LOGGER.info(LOGLINE, UPDATE_APARTMENT, Constants.IN);
+    
+        Validate.ValidateInput(bindingResult, Constants.METHOD_UPDATE);
+    
+        ServiceResponse<?> response= apartmentService.update(id, dto);
+        return HandleResponseUtil.handle(response, Constants.METHOD_UPDATE);
+        
+    }
 
 
 }

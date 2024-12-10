@@ -6,9 +6,10 @@ import com.core.coffee.dto.ServiceResponse;
 import com.core.coffee.dto.UpdateCondominiumDto;
 import com.core.coffee.entity.Condominium;
 
-public interface CondominiumService extends GenericService<CreateCondominiumDto, String>  {
+public abstract class CondominiumService extends GenericService<CreateCondominiumDto, String>  {
 
-    public ServiceResponse<Condominium> update(String condominiumId, UpdateCondominiumDto condominium);
+    public abstract  ServiceResponse<?> update(String condominiumId, UpdateCondominiumDto condominium);
+    public abstract Condominium validateExistCondominium(String condominiumId);
     
     
     
