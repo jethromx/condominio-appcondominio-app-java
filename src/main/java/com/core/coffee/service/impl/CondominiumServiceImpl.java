@@ -58,7 +58,7 @@ public class CondominiumServiceImpl  extends CondominiumService{
         LOGGER.info(LOGLINE, Constants.GETS+ENTITY, Constants.IN);
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Condominium> items = condominiumRepository.findAll(pageable);
+        Page<Condominium> items = condominiumRepository.findAllByActiveIsTrue(pageable);
 
         List<GetCondominiumDto> dtoOut = items.stream().map(item -> {
             GetCondominiumDto dto = mapperUtil.map(item, GetCondominiumDto.class);
@@ -86,7 +86,7 @@ public class CondominiumServiceImpl  extends CondominiumService{
 
         entity.setAdministrator(User.builder().id(dto.getAdministrator()).build());
         String collectionName =entity.getName().toLowerCase().trim().replace(" ", "_");
-        customRepository.createCollection(collectionName);
+       // customRepository.createCollection(collectionName);
 
         Condominium savedItem = condominiumRepository.save(entity);
         GetCondominiumDto dtoOut = mapperUtil.map(savedItem, GetCondominiumDto.class);

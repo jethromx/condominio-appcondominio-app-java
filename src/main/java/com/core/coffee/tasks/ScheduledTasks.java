@@ -38,7 +38,7 @@ public class ScheduledTasks {
     }
 
     // Expresión cron para ejecutar cada 5 minutos
-    @Scheduled(cron = "0 */5 * * * ?")
+  //  @Scheduled(cron = "0 */5 * * * ?")
     public void performTaskEvery5Minutes() {
         LOGGER.info("Tarea programada ejecutada cada 5 minutos");
         // Lógica de la tarea

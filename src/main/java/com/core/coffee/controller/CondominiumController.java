@@ -196,6 +196,13 @@ class CondominiumController {
         @Header(name = "Accept: "+MediaType.APPLICATION_JSON_VALUE)       
     })
     public ResponseEntity<?> delete(@PathVariable("idCondominium") String id) {
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return ResponseEntity.status(500).build();
+        }
         LOGGER.info(LOGLINE, Constants.METHOD_DELETE, Constants.IN);
 
         Validate.ValidateInputId(id, Constants.METHOD_DELETE);
